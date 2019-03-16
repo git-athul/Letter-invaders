@@ -18,3 +18,11 @@ def move(dictionary):
     for (row, column), letter in dictionary.items():
         moved[(row + 1, column)] = letter
     return moved
+
+def kill(dictionary, input_letter):
+    "Removes the input_letter from dictionary"
+    survived = {}
+    for key, letter in dictionary.items():
+        if letter is not input_letter:
+            survived[key] = letter
+    return survived
