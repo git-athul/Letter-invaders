@@ -20,3 +20,8 @@ def test_kill_onlylowestletter():
     init_dict = {(0, 300):'r', (60,140):'x', (210, 500):'r', (200, 100):'r'}
     killed_dict = {(0, 300):'r', (60,140):'x', (200, 100):'r'}
     assert gamelogic.kill(init_dict, 'r') == killed_dict
+
+def test_life():
+    height = 500
+    init_dict = {(0, 300):'r', (500,140):'x', (210, 500):'r', (500, 100):'r'}
+    assert gamelogic.life(init_dict, height) == 8
