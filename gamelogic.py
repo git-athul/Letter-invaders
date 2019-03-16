@@ -12,3 +12,9 @@ def new_letter(width, dictionary):
     dictionary.update(new)
     return dictionary
 
+def move(dictionary):
+    "Moves letters down"
+    moved = {}
+    for letter, (row, column) in dictionary.items():
+        moved[letter] = (row + 1, column)
+    return moved
