@@ -20,9 +20,21 @@ def move(dictionary):
     return moved
 
 def kill(dictionary, input_letter):
-    "Removes the input_letter from dictionary"
-    survived = {}
+    """
+    Removes an item of the lowest letter from the dictionary, that matches to
+    input_letter. The lowest letter will have the highest row value.
+    """
+    kill_list = []
     for key, letter in dictionary.items():
-        if letter is not input_letter:
-            survived[key] = letter
-    return survived
+        if letter is input_letter:
+            kill_list.append(key)
+
+    if kill_list:
+        low = 0
+        low_key = kill_list[0]
+        for location in kill_list:
+            if low < location[0]:
+                low = location[0]
+                low_key = location
+        del dictionary[low_key]
+    return dictionary
