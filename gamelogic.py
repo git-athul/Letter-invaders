@@ -34,3 +34,11 @@ def kill(dictionary, input_letter):
     if low_key:
         del dictionary[low_key]
     return dictionary
+
+def life(dictionary, height):
+    "Checks how many letters have passed height"
+    count = 10
+    for (row, _), _ in dictionary.items(): 
+        if row >= height:
+            count -= 1
+    return count
