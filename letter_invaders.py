@@ -21,6 +21,9 @@ def main(window):
         draw(letters, window)
         window.refresh()
         sleep(0.3)
+        entry = window.getch()
+        if entry != -1:
+            letters = kill(letters, chr(entry))
 
 if __name__ == '__main__':
     curses.wrapper(main)
