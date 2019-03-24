@@ -3,19 +3,37 @@
 import random
 import string
 
-class Setup(object):
+class Setup():
 
     def __init__(self, dictionary):
         self.dictionary = dictionary
 
     def new_letter(self, width):
         "Generates new letter and adds to dictionary"
-        key =  (1, random.randrange(1, width))
+        key = (1, random.randrange(1, width))
         char = random.choice(string.ascii_lowercase)
         color = random.randrange(3, 7)
         value = {'char':char, 'color':color}
         self.dictionary[key] = value
         return self.dictionary
+
+    def letter_generator(self, width, letter_count,
+                         gap_step, gap, switch, level_req):
+        "Generates letters in increasing frequency"
+        if switch:
+            Setup.new_letter(self, width)
+            letter_count += 1
+            switch = False
+        gap_step += 1
+        if gap == gap_step or gap == 1:
+            switch = True
+            gap_step = 0
+        if letter_count == level_req:
+            letter_count = 0
+            level_req += 7
+            if gap != 1:
+                gap -= 1
+        return self.dictionary, letter_count, gap_step, gap, switch, level_req
 
     def move(self):
         "Moves letters down by increasing value of row"
