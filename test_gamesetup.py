@@ -14,8 +14,8 @@ def test_input_update():
     """
     letter_dict = {(0, 300): {'char':'r', 'life':False}, (60, 140):{'char':'x', 'life':False}}
     updated_dict = {(0, 300): {'char':'*', 'life':4}, (60, 140):{'char':'x', 'life':False}}
-    assert Setup(letter_dict).input_update('r') == updated_dict
-    assert Setup(letter_dict).input_update('a') == letter_dict
+    assert Setup(letter_dict).input_update('r') == (updated_dict, True)
+    assert Setup(letter_dict).input_update('a') == (letter_dict, False)
 
 def test_input_update_onlyoneletter():
     "input_update() should only change the letter with highest row value"
@@ -28,7 +28,7 @@ def test_input_update_onlyoneletter():
                     (60, 140): {'char':'x', 'life':False},
                     (210, 500): {'char':'*', 'life':4},     #
                     (200, 100): {'char':'r', 'life':False}}
-    assert letter_dict.input_update('r') == updated_dict
+    assert letter_dict.input_update('r') == (updated_dict, True)
 
 def test_kill():
     """Decreases the life if it is number, and then
