@@ -6,40 +6,43 @@ from gamesetup import Setup
 
 
 def max_dimensions():
-    "Dimensions of "
+    "Dimensions of gamebox"
     height, width = 30, 65
     return height, width
 
-def draw(dictionary, window):
-    "Draws dictionary in window!"
-    height, width = max_dimensions()
-    colors = [2, 3, 4, 5, 6]
-    # [curses.COLOR_GREEN,
-    #      curses.COLOR_YELLOW,
-    #      curses.COLOR_BLUE,
-    #      curses.COLOR_MAGENTA,
-    #      curses.COLOR_CYAN]
-    for pos, color in enumerate(colors, start=3):
+def setup_colors():
+    "Setups color_pairs"
+    colors = [2, 3, 4, 5, 6, 1]
+    # [GREEN, YELLOW, BLUE, MAGENTA, CYAN, RED]
+    for pos, color in enumerate(colors, start=1):
         curses.init_pair(pos, color, curses.COLOR_BLACK)
 
+def draw(dictionary, window):
+    "Draws dictionary in window!"
+    height, _ = max_dimensions()
+
     for (row, column), letter in dictionary.items():
-        if row > height or column > width:
+        if row > height:
+            continue # Skips these letters
+        if letter['char'] == "*":
+            window.addstr(row, column, "*", curses.color_pair(6))
             continue
         window.addstr(row, column, letter['char'], curses.color_pair(letter['color']))
 
-def draw_life(window, letters):
-    "Draws chances in window"
-    curses.init_pair(1, curses.COLOR_RED, curses.COLOR_BLACK)
+def draw_life(dictionary, window):
+    "Draws chances left in window"
     height, width = max_dimensions()
-    lifecount = "\u2665 "*(7-Setup(letters).life(height))
+    lifecount = "\u2665 "*(CHANCES - Setup(dictionary).life(height))
     init_pos = width - len(lifecount) - 2
-    window.addstr(0, init_pos, lifecount, curses.color_pair(1))
+    window.addstr(0, init_pos, lifecount, curses.color_pair(6))
 
 def main(window):
     curses.curs_set(0)
+    curses.init_color(0, 0, 0, 0) # Black bg
     letters = {}
     height, width = max_dimensions()
     window.nodelay(True)
+    setup_colors()
 
     count = 0
     gap_step = 0
@@ -47,17 +50,28 @@ def main(window):
     switch = True
     req = 7
 
+    global CHANCES
+    CHANCES = 7
+
     while True:
         screen_h, screen_w = window.getmaxyx()
-        if screen_h < height or screen_w < width:
+        if screen_h < height+1 or screen_w < width+1:
             raise SystemExit(
-                '''Current terminal size: [{0} x {1}]
-Minimum required size: [{2} x {3}]'''
-                .format(screen_w, screen_h, width, height))
+                '''
+                Current terminal size: [{0} x {1}]
+                Minimum required size: [{2} x {3}]
+                '''
+                .format(screen_w, screen_h, width+1, height+1))
 
         window.clear()
         gamebox = window.subwin(height+1, width+1, 0, 0)
         gamebox.box()
+
+        entry = window.getch()
+        if entry != -1:
+            letters = Setup(letters).input_update(chr(entry))
+        if Setup(letters).life(height) == CHANCES:
+            break
 
         returns = Setup(letters).letter_generator(width,
                                                   count,
@@ -66,14 +80,10 @@ Minimum required size: [{2} x {3}]'''
         letters, count, gap_step, gap, switch, req = returns
 
         letters = Setup(letters).move()
+        letters = Setup(letters).kill()
         draw(letters, window)
-        draw_life(window, letters)
+        draw_life(letters, window)
         window.refresh()
-        entry = window.getch()
-        if entry != -1:
-            letters = Setup(letters).kill(chr(entry))
-        if Setup(letters).life(height) == 7:
-            break
         sleep(0.25)
 
 if __name__ == '__main__':
