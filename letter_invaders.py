@@ -39,9 +39,9 @@ def draw(dictionary, window):
             continue
         window.addstr(row, column, letter['char'], curses.color_pair(letter['color']))
 
-def draw_life(dictionary, window):
+def draw_life(lifecount, window):
     "Draws chances left in window"
-    lifecount = "\u2665 "*(CHANCES - Setup(dictionary).life(HEIGHT))
+    lifecount = "\u2665 "*(CHANCES - lifecount)
     init_pos = WIDTH - len(lifecount) - 2
     window.addstr(0, init_pos, lifecount, curses.color_pair(6))
 
@@ -57,13 +57,13 @@ def main(window):
     window.nodelay(True)
     letters = {}
 
-    count = 0
-    gap_step = 0
-    gap = 7
-    switch = True
-    req = 7
-
+    settings = {'letter_count':0,
+                'switch':True,
+                'gap_step':0,
+                'gap':7,
+                'level_req':7}
     global SCORE_VALUE
+    lifecount = 0
 
     while True:
         check_window(window)
@@ -75,20 +75,16 @@ def main(window):
         if entry != -1:
             letters, score = Setup(letters).input_update(chr(entry))
             if score:
-                SCORE_VALUE += 8-gap
-        if Setup(letters).life(HEIGHT) == CHANCES:
+                SCORE_VALUE += 8 - settings['gap']
+        if lifecount == CHANCES:
             break
 
-        returns = Setup(letters).letter_generator(WIDTH,
-                                                  count,
-                                                  gap_step, gap,
-                                                  switch, req)
-        letters, count, gap_step, gap, switch, req = returns
-
+        letters, settings = Setup(letters).letter_generator(WIDTH, settings)
         letters = Setup(letters).move()
         letters = Setup(letters).kill()
+        lifecount = Setup(letters).life(HEIGHT, lifecount)
         draw(letters, window)
-        draw_life(letters, window)
+        draw_life(lifecount, window)
         draw_score(window)
         window.refresh()
         sleep(0.25)
