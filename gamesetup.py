@@ -12,8 +12,8 @@ class Setup():
         "Generates new letter and adds to dictionary"
         key = (1, random.randrange(1, width))
         char = random.choice(string.ascii_lowercase)
-        color = random.randrange(3, 7)
-        value = {'char':char, 'color':color}
+        color = random.randrange(1, 6)
+        value = {'char':char, 'color':color, 'life':False}
         self.dictionary[key] = value
         return self.dictionary
 
@@ -42,10 +42,10 @@ class Setup():
             moved[(row + 1, column)] = value
         return moved
 
-    def kill(self, input_letter):
+    def input_update(self, input_letter):
         """
-        If 'input_letter' matches to any 'char' from dictionary, removes
-        the item with highest row among matches.
+        If 'input_letter' matches to any 'char' from dictionary, changes
+        the value of item with highest row among matches.
         """
         row = -1
         row_key = False
@@ -54,14 +54,29 @@ class Setup():
                 if row < location[0]:
                     row = location[0]
                     row_key = location
+
         if row_key:
-            del self.dictionary[row_key]
+            letter = self.dictionary[row_key]
+            letter['char'] = "*"
+            letter['life'] = 4
+        return self.dictionary
+
+    def kill(self):
+        "Removes the item when life is equal to zero"
+        del_key = False
+        for location, letter in self.dictionary.items():
+            if letter['life']:
+                letter['life'] -= 1
+                if letter['life'] == 0:
+                    del_key = location
+        if del_key:
+            del self.dictionary[del_key]
         return self.dictionary
 
     def life(self, height):
         "Checks how many letters have passed the 'height'"
         count = 0
-        for (row, _), _ in self.dictionary.items():
-            if row >= height:
+        for (row, _), letter in self.dictionary.items():
+            if row >= height and not letter['life']:
                 count += 1
         return count
