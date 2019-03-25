@@ -17,23 +17,22 @@ class Setup():
         self.dictionary[key] = value
         return self.dictionary
 
-    def letter_generator(self, width, letter_count,
-                         gap_step, gap, switch, level_req):
+    def letter_generator(self, width, sett):
         "Generates letters in increasing frequency"
-        if switch:
+        if sett['switch']:
             Setup.new_letter(self, width)
-            letter_count += 1
-            switch = False
-        gap_step += 1
-        if gap == gap_step or gap == 1:
-            switch = True
-            gap_step = 0
-        if letter_count == level_req:
-            letter_count = 0
-            level_req += 7
-            if gap != 1:
-                gap -= 1
-        return self.dictionary, letter_count, gap_step, gap, switch, level_req
+            sett['letter_count'] += 1
+            sett['switch'] = False
+        sett['gap_step'] += 1
+        if sett['gap'] == sett['gap_step'] or sett['gap'] == 1:
+            sett['switch'] = True
+            sett['gap_step'] = 0
+        if sett['letter_count'] == sett['level_req']:
+            sett['letter_count'] = 0
+            sett['level_req'] += 7
+            if sett['gap'] != 1:
+                sett['gap'] -= 1
+        return self.dictionary, sett
 
     def move(self):
         "Moves letters down by increasing value of row"
@@ -68,7 +67,6 @@ class Setup():
         Decreases the life if it is number, and then
         removes the item when life is equal to zero
         """
-
         del_key = []
         for location, letter in self.dictionary.items():
             if letter['life']:
@@ -80,10 +78,13 @@ class Setup():
             del_key.pop(0)
         return self.dictionary
 
-    def life(self, height):
+    def life(self, height, count):
         "Checks how many letters have passed the 'height'"
-        count = 0
-        for (row, _), letter in self.dictionary.items():
-            if row >= height and not letter['life']:
+        del_key = False
+        for location, letter in self.dictionary.items():
+            if location[0] > height and not letter['life']:
                 count += 1
+                del_key = location
+        if del_key:
+            del self.dictionary[del_key]
         return count
