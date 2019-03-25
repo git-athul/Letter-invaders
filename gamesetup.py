@@ -49,6 +49,7 @@ class Setup():
         """
         row = -1
         row_key = False
+        score = False
         for location, letter in self.dictionary.items():
             if letter['char'] is input_letter:
                 if row < location[0]:
@@ -59,18 +60,24 @@ class Setup():
             letter = self.dictionary[row_key]
             letter['char'] = "*"
             letter['life'] = 4
-        return self.dictionary
+            score = True
+        return self.dictionary, score
 
     def kill(self):
-        "Removes the item when life is equal to zero"
-        del_key = False
+        """
+        Decreases the life if it is number, and then
+        removes the item when life is equal to zero
+        """
+
+        del_key = []
         for location, letter in self.dictionary.items():
             if letter['life']:
                 letter['life'] -= 1
                 if letter['life'] == 0:
-                    del_key = location
-        if del_key:
-            del self.dictionary[del_key]
+                    del_key.append(location)
+        while del_key:
+            del self.dictionary[del_key[0]]
+            del_key.pop(0)
         return self.dictionary
 
     def life(self, height):
