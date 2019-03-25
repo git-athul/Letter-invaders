@@ -45,9 +45,10 @@ def test_kill():
 def test_life():
     "Checks how many letters have passed the 'height'"
     height = 500
+    count = 1
     letter_dict = Setup({(0, 300):{'char':'r', 'life':False},
-                         (500, 140):{'char':'x', 'life':False},  #
+                         (501, 140):{'char':'x', 'life':False},  #
                          (500, 130):{'char':'x', 'life':3},
                          (210, 500):{'char':'r', 'life':False},
-                         (500, 100):{'char':'r', 'life':False}}) #
-    assert letter_dict.life(height) == 2
+                         (500, 100):{'char':'r', 'life':False}}) 
+    assert letter_dict.life(height, count) == 2
