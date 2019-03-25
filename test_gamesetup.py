@@ -30,7 +30,20 @@ def test_input_update_onlyoneletter():
                     (200, 100): {'char':'r', 'life':False}}
     assert letter_dict.input_update('r') == updated_dict
 
+def test_kill():
+    """Decreases the life if it is number, and then
+    removes the item when life is equal to zero"""
+    letter_dict = Setup({(0, 300): {'char':'*', 'life':3},
+                         (210, 500): {'char':'*', 'life':1},
+                         (200, 100): {'char':'r', 'life':False}})
+
+    killed_dict = {(0, 300): {'char':'*', 'life':2},
+                   (200, 100): {'char':'r', 'life':False}}
+    assert letter_dict.kill() == killed_dict
+
+
 def test_life():
+    "Checks how many letters have passed the 'height'"
     height = 500
     letter_dict = Setup({(0, 300):{'char':'r', 'life':False},
                          (500, 140):{'char':'x', 'life':False},  #
