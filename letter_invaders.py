@@ -12,8 +12,8 @@ def max_dimensions():
 
 def setup_colors():
     "Setups color_pairs"
-    colors = [2, 3, 4, 5, 6, 1]
-    # [GREEN, YELLOW, BLUE, MAGENTA, CYAN, RED]
+    colors = [2, 3, 4, 5, 6, 1, 7]
+    # [GREEN, YELLOW, BLUE, MAGENTA, CYAN, RED, WHITE]
     for pos, color in enumerate(colors, start=1):
         curses.init_pair(pos, color, curses.COLOR_BLACK)
 
@@ -36,6 +36,11 @@ def draw_life(dictionary, window):
     init_pos = width - len(lifecount) - 2
     window.addstr(0, init_pos, lifecount, curses.color_pair(6))
 
+def draw_score(window):
+    "Draws the score in window"
+    string = " Score: {} ".format(SCORE_VALUE)
+    window.addstr(0, 2, string, curses.color_pair(7))
+
 def main(window):
     curses.curs_set(0)
     curses.init_color(0, 0, 0, 0) # Black bg
@@ -53,6 +58,10 @@ def main(window):
     global CHANCES
     CHANCES = 7
 
+    global SCORE_VALUE
+    SCORE_VALUE = 0
+    score = False
+
     while True:
         screen_h, screen_w = window.getmaxyx()
         if screen_h < height+1 or screen_w < width+1:
@@ -69,7 +78,7 @@ def main(window):
 
         entry = window.getch()
         if entry != -1:
-            letters = Setup(letters).input_update(chr(entry))
+            letters, score = Setup(letters).input_update(chr(entry))
         if Setup(letters).life(height) == CHANCES:
             break
 
@@ -78,13 +87,17 @@ def main(window):
                                                   gap_step, gap,
                                                   switch, req)
         letters, count, gap_step, gap, switch, req = returns
-
+        if score:
+            SCORE_VALUE += 8-gap
+            score = False
         letters = Setup(letters).move()
         letters = Setup(letters).kill()
         draw(letters, window)
         draw_life(letters, window)
+        draw_score(window)
         window.refresh()
         sleep(0.25)
 
 if __name__ == '__main__':
     curses.wrapper(main)
+    print("You scored {} points.".format(SCORE_VALUE))
