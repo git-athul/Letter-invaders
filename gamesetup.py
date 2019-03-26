@@ -3,7 +3,7 @@ import random
 import string
 
 class Setup():
-    "Functions for Letter invaders game"
+    "Functions for implement the Letter invaders game logic"
 
     def __init__(self, dictionary):
         self.dictionary = dictionary
@@ -44,7 +44,7 @@ class Setup():
 
     def update_input(self, input_letter):
         """
-        If 'input_letter' matches to any 'char' from dictionary, 
+        If 'input_letter' matches to any 'char' from dictionary,
         then changes the value of matched item with highest row.
         """
         row = -1
@@ -87,9 +87,10 @@ class Setup():
         """
         del_key = False
         for location, letter in self.dictionary.items():
-            if location[0] > height and not letter['life']:
-                count += 1
+            if location[0] > height:
                 del_key = location
+                if not letter['life']:
+                    count += 1
         if del_key:
             del self.dictionary[del_key]
         return count
