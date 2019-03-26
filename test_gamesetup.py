@@ -12,22 +12,24 @@ def test_update_input():
     update_input() should change the dictionary item if entered character
     matches letter in dictionary-value.
     """
-    letter_dict = {(0, 300): {'char':'r', 'life':False}, (60, 140):{'char':'x', 'life':False}}
-    updated_dict = {(0, 300): {'char':'*', 'life':4}, (60, 140):{'char':'x', 'life':False}}
+    letter_dict = {(0, 300): {'char':'r', 'life':False, 'color':1},
+                   (60, 140):{'char':'x', 'life':False, 'color':2}}
+    updated_dict = {(0, 300): {'char':'*', 'life':4, 'color':6},
+                    (60, 140):{'char':'x', 'life':False, 'color':2}}
     assert Setup(letter_dict).update_input('r') == (updated_dict, True)
     assert Setup(letter_dict).update_input('a') == (letter_dict, False)
 
 def test_update_input_onlyoneletter():
     "update_input() should only change the letter with highest row value"
-    letter_dict = Setup({(0, 300): {'char':'r', 'life':False},
-                         (60, 140): {'char':'x', 'life':False},
-                         (210, 500): {'char':'r', 'life':False},
-                         (200, 100): {'char':'r', 'life':False}})
+    letter_dict = Setup({(0, 300): {'char':'r', 'life':False, 'color':1},
+                         (60, 140): {'char':'x', 'life':False, 'color':2},
+                         (210, 500): {'char':'r', 'life':False, 'color':3},
+                         (200, 100): {'char':'r', 'life':False, 'color':4}})
 
-    updated_dict = {(0, 300): {'char':'r', 'life':False},
-                    (60, 140): {'char':'x', 'life':False},
-                    (210, 500): {'char':'*', 'life':4},     #
-                    (200, 100): {'char':'r', 'life':False}}
+    updated_dict = {(0, 300): {'char':'r', 'life':False, 'color':1},
+                    (60, 140): {'char':'x', 'life':False, 'color':2},
+                    (210, 500): {'char':'*', 'life':4, 'color':6},     #
+                    (200, 100): {'char':'r', 'life':False, 'color':4}}
     assert letter_dict.update_input('r') == (updated_dict, True)
 
 def test_expire_entered():

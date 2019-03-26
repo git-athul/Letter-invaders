@@ -60,6 +60,7 @@ class Setup():
             letter = self.dictionary[row_key]
             letter['char'] = "*"
             letter['life'] = 4
+            letter['color'] = 6
             score = True
         return self.dictionary, score
 
