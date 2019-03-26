@@ -1,15 +1,15 @@
-"Functions for Letter invaders game"
 
 import random
 import string
 
 class Setup():
+    "Functions for Letter invaders game"
 
     def __init__(self, dictionary):
         self.dictionary = dictionary
 
-    def new_letter(self, width):
-        "Generates new letter and adds to dictionary"
+    def new_letter(self, width): # pragma: no cover
+        "Adds new letter to dictionary"
         key = (1, random.randrange(1, width))
         char = random.choice(string.ascii_lowercase)
         color = random.randrange(1, 6)
@@ -17,7 +17,7 @@ class Setup():
         self.dictionary[key] = value
         return self.dictionary
 
-    def letter_generator(self, width, sett):
+    def generate_letter(self, width, sett):
         "Generates letters in increasing frequency"
         if sett['switch']:
             Setup.new_letter(self, width)
@@ -39,12 +39,13 @@ class Setup():
         moved = {}
         for (row, column), value in self.dictionary.items():
             moved[(row + 1, column)] = value
-        return moved
+        self.dictionary = moved
+        return self.dictionary
 
-    def input_update(self, input_letter):
+    def update_input(self, input_letter):
         """
-        If 'input_letter' matches to any 'char' from dictionary, changes
-        the value of item with highest row among matches.
+        If 'input_letter' matches to any 'char' from dictionary, 
+        then changes the value of matched item with highest row.
         """
         row = -1
         row_key = False
@@ -62,10 +63,10 @@ class Setup():
             score = True
         return self.dictionary, score
 
-    def kill(self):
+    def expire_entered(self):
         """
-        Decreases the life if it is number, and then
-        removes the item when life is equal to zero
+        Decreases the 'life' if it is number, and then
+        removes the item when 'life' is equal to zero
         """
         del_key = []
         for location, letter in self.dictionary.items():
@@ -78,8 +79,11 @@ class Setup():
             del_key.pop(0)
         return self.dictionary
 
-    def life(self, height, count):
-        "Checks how many letters have passed the 'height'"
+    def count_life(self, height, count):
+        """
+        Increases 'count' when a letter passes the 'height'
+        and removes that item
+        """
         del_key = False
         for location, letter in self.dictionary.items():
             if location[0] > height and not letter['life']:

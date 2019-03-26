@@ -7,18 +7,18 @@ def test_move():
     moved_dict = {(1, 300):{'char':'r'}, (61, 140):{'char':'x'}}
     assert letter_dict.move() == moved_dict
 
-def test_input_update():
+def test_update_input():
     """
-    input_update() should change the dictionary item if entered character
+    update_input() should change the dictionary item if entered character
     matches letter in dictionary-value.
     """
     letter_dict = {(0, 300): {'char':'r', 'life':False}, (60, 140):{'char':'x', 'life':False}}
     updated_dict = {(0, 300): {'char':'*', 'life':4}, (60, 140):{'char':'x', 'life':False}}
-    assert Setup(letter_dict).input_update('r') == (updated_dict, True)
-    assert Setup(letter_dict).input_update('a') == (letter_dict, False)
+    assert Setup(letter_dict).update_input('r') == (updated_dict, True)
+    assert Setup(letter_dict).update_input('a') == (letter_dict, False)
 
-def test_input_update_onlyoneletter():
-    "input_update() should only change the letter with highest row value"
+def test_update_input_onlyoneletter():
+    "update_input() should only change the letter with highest row value"
     letter_dict = Setup({(0, 300): {'char':'r', 'life':False},
                          (60, 140): {'char':'x', 'life':False},
                          (210, 500): {'char':'r', 'life':False},
@@ -28,22 +28,21 @@ def test_input_update_onlyoneletter():
                     (60, 140): {'char':'x', 'life':False},
                     (210, 500): {'char':'*', 'life':4},     #
                     (200, 100): {'char':'r', 'life':False}}
-    assert letter_dict.input_update('r') == (updated_dict, True)
+    assert letter_dict.update_input('r') == (updated_dict, True)
 
-def test_kill():
-    """Decreases the life if it is number, and then
-    removes the item when life is equal to zero"""
+def test_expire_entered():
+    "tests whether 'life' is decreasing and expiring for entered"
     letter_dict = Setup({(0, 300): {'char':'*', 'life':3},
                          (210, 500): {'char':'*', 'life':1},
                          (200, 100): {'char':'r', 'life':False}})
 
-    killed_dict = {(0, 300): {'char':'*', 'life':2},
+    expired_dict = {(0, 300): {'char':'*', 'life':2},
                    (200, 100): {'char':'r', 'life':False}}
-    assert letter_dict.kill() == killed_dict
+    assert letter_dict.expire_entered() == expired_dict
 
 
-def test_life():
-    "Checks how many letters have passed the 'height'"
+def test_count_life():
+    "tests whether count is increasing"
     height = 500
     count = 1
     letter_dict = Setup({(0, 300):{'char':'r', 'life':False},
@@ -51,4 +50,4 @@ def test_life():
                          (500, 130):{'char':'x', 'life':3},
                          (210, 500):{'char':'r', 'life':False},
                          (500, 100):{'char':'r', 'life':False}}) 
-    assert letter_dict.life(height, count) == 2
+    assert letter_dict.count_life(height, count) == 2
