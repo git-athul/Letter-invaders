@@ -12,18 +12,17 @@ def main(screen):
     global SCORE
     chances, lifecount = 7, 0
     height, width = 30, 65
-    letters = {}
+    letters = Game({})
     screen = Window(screen, height, width)
 
     while True:
         screen.make_subwindow()
-        letters = Game(letters)
         screen.take_input(letters, settings)
-        _, settings = letters.generate_letter(width, settings)
+        settings = letters.generate_letter(width, settings)
         letters.move()
         lifecount = letters.count_life(height, lifecount)
-        letters = letters.expire_entered()
-        screen.draw(letters, lifecount, chances)
+        letters.expire_entered()
+        screen.draw(letters.dictionary, lifecount, chances)
         if lifecount == chances:
             SCORE = screen.finalscore()
             break

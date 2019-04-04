@@ -30,7 +30,7 @@ Minimum required size: [{2} x {3}]'''
         "Takes input, updates dictionary and calculates score"
         entry = self.win.getch()
         if entry != -1:
-            _, score = dictionary.update_input(chr(entry))
+            score = dictionary.update_input(chr(entry))
             if score:
                 self.score_value += 8 - settings['gap']
 
