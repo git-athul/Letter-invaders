@@ -2,7 +2,7 @@
 
 from curses import wrapper
 from time import sleep
-from gamesetup import Setup
+from gamesetup import Game
 from gamewindow import Window
 
 
@@ -17,7 +17,7 @@ def main(screen):
 
     while True:
         screen.make_subwindow()
-        letters = Setup(letters)
+        letters = Game(letters)
         screen.take_input(letters, settings)
         _, settings = letters.generate_letter(width, settings)
         letters.move()

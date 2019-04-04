@@ -2,7 +2,7 @@
 import random
 import string
 
-class Setup(): # Name it more like Game
+class Game():
     "Functions for implement the Letter invaders game logic"
 
     def __init__(self, dictionary):
@@ -15,7 +15,6 @@ class Setup(): # Name it more like Game
         color = random.randrange(1, 6)
         value = {'char':char, 'color':color, 'life':False}
         self.dictionary[key] = value
-        # return self.dictionary
 
     def generate_letter(self, width, sett):
         "Generates letters in increasing frequency"
@@ -33,7 +32,6 @@ class Setup(): # Name it more like Game
             if sett['gap'] != 1:
                 sett['gap'] -= 1
         return sett
-        # return self.dictionary, sett
 
     def move(self):
         "Moves letters down by increasing value of row"
@@ -41,7 +39,6 @@ class Setup(): # Name it more like Game
         for (row, column), value in self.dictionary.items():
             moved[(row + 1, column)] = value
         self.dictionary = moved
-        # return self.dictionary
 
     def update_input(self, input_letter):
         """
@@ -64,7 +61,6 @@ class Setup(): # Name it more like Game
             letter['color'] = 6
             score = True
         return score
-        # return self.dictionary, score
 
     def expire_entered(self):
         """
@@ -80,7 +76,6 @@ class Setup(): # Name it more like Game
         while del_key:
             del self.dictionary[del_key[0]]
             del_key.pop(0)
-        return self.dictionary
 
     def count_life(self, height, count):
         """

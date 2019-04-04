@@ -1,9 +1,9 @@
-from gamesetup import Setup
+from gamesetup import Game
 
 
 def test_move():
     "move() should increase the row-value by one"
-    letter = Setup({(0, 300): {'char':'r'}, (60, 140):{'char':'x'}})
+    letter = Game({(0, 300): {'char':'r'}, (60, 140):{'char':'x'}})
     letter.move()
     moved_dict = {(1, 300):{'char':'r'}, (61, 140):{'char':'x'}}
     assert letter.dictionary == moved_dict
@@ -15,7 +15,7 @@ def test_update_input():
     matches letter in dictionary-value.
     """
 
-    letter = Setup({(0, 300): {'char':'r', 'life':False, 'color':1},
+    letter = Game({(0, 300): {'char':'r', 'life':False, 'color':1},
                    (60, 140):{'char':'x', 'life':False, 'color':2}})
     updated_dict = {(0, 300): {'char':'*', 'life':4, 'color':6},
                     (60, 140):{'char':'x', 'life':False, 'color':2}}
@@ -28,7 +28,7 @@ def test_update_input():
 
 def test_update_input_onlyoneletter():
     "update_input() should only change the letter with highest row value"
-    letter = Setup({(0, 300): {'char':'r', 'life':False, 'color':1},
+    letter = Game({(0, 300): {'char':'r', 'life':False, 'color':1},
                          (60, 140): {'char':'x', 'life':False, 'color':2},
                          (210, 500): {'char':'r', 'life':False, 'color':3},
                          (200, 100): {'char':'r', 'life':False, 'color':4}})
@@ -43,7 +43,7 @@ def test_update_input_onlyoneletter():
 
 def test_expire_entered():
     "tests whether 'life' is decreasing and expiring for entered"
-    letter = Setup({(0, 300): {'char':'*', 'life':3},
+    letter = Game({(0, 300): {'char':'*', 'life':3},
                          (210, 500): {'char':'*', 'life':1},
                          (200, 100): {'char':'r', 'life':False}})
 
@@ -58,7 +58,7 @@ def test_count_life():
     "tests whether count is increasing"
     height = 500
     count = 1
-    letter_dict = Setup({(0, 300):{'char':'r', 'life':False},
+    letter_dict = Game({(0, 300):{'char':'r', 'life':False},
                          (501, 140):{'char':'x', 'life':False},  #
                          (500, 130):{'char':'x', 'life':3},
                          (210, 500):{'char':'r', 'life':False},
@@ -68,7 +68,7 @@ def test_count_life():
 
 def test_generate_letter():
     "tests the changes in settings"
-    new = Setup({})
+    new = Game({})
 
     input_settings = {'letter_count':0,
                       'switch':False, #
