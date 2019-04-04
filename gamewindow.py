@@ -8,7 +8,7 @@ class Window():
         self.height = height
         self.width = width
         self.score_value = 0
-        Window.setup_colors()
+        self.setup_colors()
         self.win.nodelay(True)
         curses.init_color(curses.COLOR_BLACK, 0, 0, 0) # Black BG
         curses.curs_set(0)
@@ -34,7 +34,7 @@ Minimum required size: [{2} x {3}]'''
             if score:
                 self.score_value += 8 - settings['gap']
 
-    def setup_colors():
+    def setup_colors(self):
         "Setups color_pairs"
         colors = [2, 3, 4, 5, 6, 1, 7]
         # [GREEN, YELLOW, BLUE, MAGENTA, CYAN, RED, WHITE]
@@ -57,8 +57,8 @@ Minimum required size: [{2} x {3}]'''
         for (row, column), letter in dictionary.items():
             self.win.addstr(row, column, letter['char'],
                             curses.color_pair(letter['color']))
-        Window.draw_life(self, lifecount, chances)
-        Window.draw_score(self)
+        self.draw_life(lifecount, chances)
+        self.draw_score()
         self.win.refresh()
 
     def finalscore(self):
